@@ -4,8 +4,12 @@ import matplotlib.pyplot as plt
 # Result Visualization
 # ==========================================
 
+# 出力する画像ファイルの名前はここで編集
+outputfile = "result_v2_rastrigin_bimodal.png"
+
 def plot_results(x, y_true, results, normalization_params):
     """フィッティング結果とLossの推移をプロットする"""
+    
     _, _, y_min, y_max = normalization_params
     
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -48,5 +52,5 @@ def plot_results(x, y_true, results, normalization_params):
     ax2.grid(True)
     
     plt.tight_layout()
-    plt.savefig("result_rastrigin_hybrid.png")
-    print("\nSaved result_rastrigin_hybrid.png")
+    plt.savefig(outputfile)
+    print(outputfile)

@@ -24,5 +24,12 @@ class Network:
     def update(self, learning_rate):
         # 勾配降下法によるパラメータの更新
         for layer in self.layers:
-            layer.weights -= learning_rate * layer.weights_gradient
-            layer.biases -= learning_rate * layer.biases_gradient
+            # 入力層に近い層を大粒子として専用の学習率を適用する
+            if layer.name == "Hidden1":
+                layer.weights -= learning_rate * layer.weights_gradient
+                layer.biases -= learning_rate * layer.biases_gradient
+
+            # 出力層に近い層を小粒子として専用の学習率を適用する
+            if layer.name in ["Hidden2", "Output"]:
+                layer.weights -= (learning_rate*1.5) * layer.weights_gradient
+                layer.biases -= (learning_rate*1.5) * layer.biases_gradient          

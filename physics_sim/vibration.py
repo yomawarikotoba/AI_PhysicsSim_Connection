@@ -15,13 +15,25 @@ class PhysicsOptimizer:
            Hybridモードでも有効
         """
         if self.mode not in ["Horizontal", "Hybrid"]: return
-
+        
         for layer in network.layers:
-            # 勾配の大きさに関わらず一定のノイズ
-            noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
-            noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
-            layer.weights_gradient += noise_w
-            layer.biases_gradient += noise_b
+            # 入力層に近い層を大粒子と見立てて分岐
+            if layer.name == "Hidden1":
+                # 勾配の大きさに関わらず一定のノイズ
+                noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
+                noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
+                layer.weights_gradient += noise_w
+                layer.biases_gradient += noise_b
+
+            # 出力に近い層を小粒子と見立てて分岐
+            # 大粒子の1/10のスケールとしておく
+            elif layer.name in ["Hidden2" or "Output"]:
+                noise_w = np.random.normal(0, self.noise_scale*1.5, layer.weights_gradient.shape)
+                noise_b = np.random.normal(0, self.noise_scale*1.5, layer.biases_gradient.shape)
+                layer.weights_gradient += noise_w
+                layer.biases_gradient += noise_b
+
+
 
     def apply_vertical_vibration(self, network, epoch):
         """鉛直振動: 重みに衝撃を与える
