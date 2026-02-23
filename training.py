@@ -6,18 +6,15 @@ from ml_core.layer import DenseLayer
 from ml_core.loss import MSELoss
 from ml_core.activations import swish, swish_deriv, identity, identity_deriv
 from physics_sim.vibration import PhysicsOptimizer
-
+from ml_core.network import BimodalNetwork
 # ==========================================
 # Training Function
 # ==========================================
 def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     print(f"Training Mode: {mode_name}...")
     
-    # ネットワーク構築 (1->64->64->1)
-    net = Network()
-    net.add(DenseLayer(1, 64, swish, swish_deriv, name="Hidden1")) 
-    net.add(DenseLayer(64, 64, swish, swish_deriv, name="Hidden2")) 
-    net.add(DenseLayer(64, 1, identity, identity_deriv, name="Output"))
+    # 並列処理ネットワーク構築
+    net = BimodalNetwork()
     
     loss_func = MSELoss()
     
@@ -34,7 +31,7 @@ def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     
     # ベストな状態を保存するための変数
     best_loss = float('inf')
-    best_net_state = None
+    best_net = None
 
     for epoch in range(epochs):
         indices = np.arange(num_samples)
@@ -67,15 +64,15 @@ def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
             if is_shock_time or is_final:
                 if avg_loss < best_loss:
                     best_loss = avg_loss
-                    best_net_state = copy.deepcopy(net.layers)
+                    best_net = copy.deepcopy(net)
         
         # 鉛直振動の適用
         optimizer.apply_vertical_vibration(net, epoch)
 
     # VerticalまたはHybridモードの場合、最終的にベストなモデルを復元
-    if mode_name in ["Vertical", "Hybrid"] and best_net_state is not None:
+    if mode_name in ["Vertical", "Hybrid"] and best_net is not None:
         print(f"  >>> Restoring Best Model (Loss: {best_loss:.5f})")
-        net.layers = best_net_state
+        net = best_net
         loss_history[-1] = best_loss
 
     return net, loss_history

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # ==========================================
 
 # 出力する画像ファイルの名前はここで編集
-outputfile = "result_v2_rastrigin_bimodal.png"
+outputfile = "result_v4_rastrigin_bimodal_simaltanius_学習率ノイズ小粒子小さく.png"
 
 def plot_results(x, y_true, results, normalization_params):
     """フィッティング結果とLossの推移をプロットする"""
