@@ -17,24 +17,28 @@ class PhysicsOptimizer:
         if self.mode not in ["Horizontal", "Hybrid"]: return
         
         for layer in network.layers:
-            # マクロ層：基準のノイズでずっしりと
-            if layer.name == "Macro_Hidden":
-                # 勾配の大きさに関わらず一定のノイズ
-                noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
-                noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
-                layer.weights_gradient += noise_w
-                layer.biases_gradient += noise_b
+            noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
+            noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
+            layer.weights_gradient += noise_w
+            layer.biases_gradient += noise_b
+            # # マクロ層：基準のノイズでずっしりと
+            # if layer.name == "Hidden1":
+            #     # 勾配の大きさに関わらず一定のノイズ
+            #     noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
+            #     noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
+            #     layer.weights_gradient += noise_w
+            #     layer.biases_gradient += noise_b
 
-            # ミクロ層：小さな石はよく動く（1.5倍程度、要調整）
-            elif layer.name == "Micro_Hidden":
-                noise_w = np.random.normal(0, self.noise_scale*0.1, layer.weights_gradient.shape)
-                noise_b = np.random.normal(0, self.noise_scale*0.1, layer.biases_gradient.shape)
-                layer.weights_gradient += noise_w
-                layer.biases_gradient += noise_b
+            # # ミクロ層：小さな石はよく動く（1.5倍程度、要調整）
+            # elif layer.name == "Hidden2":
+            #     noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
+            #     noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
+            #     layer.weights_gradient += noise_w
+            #     layer.biases_gradient += noise_b
 
-            # 出力層：出力にノイズは加えない
-            elif layer.name in ["Macro_Output", "Micro_Output"]:
-                pass
+            # # 出力層：出力にノイズは加えない
+            # elif layer.name == "Output":
+            #     pass
 
 
 

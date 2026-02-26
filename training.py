@@ -4,18 +4,21 @@ import copy
 from ml_core.network import Network
 from ml_core.layer import DenseLayer
 from ml_core.loss import MSELoss
-from ml_core.activations import swish, swish_deriv, identity, identity_deriv
+from ml_core.activations import tanh, tanh_deriv, swish, swish_deriv, identity, identity_deriv
 from physics_sim.vibration import PhysicsOptimizer
-from ml_core.network import BimodalNetwork
+# from ml_core.network import BimodalNetwork
 # ==========================================
 # Training Function
 # ==========================================
 def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     print(f"Training Mode: {mode_name}...")
     
-    # 並列処理ネットワーク構築
-    net = BimodalNetwork()
-    
+    # ネットワーク構築
+    net = Network()
+    net.add(DenseLayer(1, 64, tanh, tanh_deriv, name="Hidden1"))
+    net.add(DenseLayer(64, 64, tanh, tanh_deriv, name="Hidden2"))
+    net.add(DenseLayer(64, 1, identity, identity_deriv, name="Output"))
+
     loss_func = MSELoss()
     
     # 物理オプティマイザの設定
