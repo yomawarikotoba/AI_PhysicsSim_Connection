@@ -10,7 +10,7 @@ class PhysicsOptimizer:
         self.shock_interval = shock_interval
         self.shock_scale = shock_scale
     
-    def apply_horizontal_vibration(self, network):
+    def apply_horizontal_vibration(self, network, noise_factor=0.07):
         """水平振動: 勾配にノイズを乗せる
            Hybridモードでも有効
         """
@@ -19,8 +19,8 @@ class PhysicsOptimizer:
         for layer in network.layers:
             noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
             noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
-            layer.weights_gradient += noise_w
-            layer.biases_gradient += noise_b
+            layer.weights_gradient += noise_factor * noise_w
+            layer.biases_gradient += noise_factor * noise_b
             # # マクロ層：基準のノイズでずっしりと
             # if layer.name == "Hidden1":
             #     # 勾配の大きさに関わらず一定のノイズ

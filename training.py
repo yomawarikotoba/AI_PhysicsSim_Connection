@@ -15,9 +15,9 @@ def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     
     # ネットワーク構築
     net = Network()
-    net.add(DenseLayer(1, 64, tanh, tanh_deriv, name="Hidden1"))
-    net.add(DenseLayer(64, 64, tanh, tanh_deriv, name="Hidden2"))
-    net.add(DenseLayer(64, 1, identity, identity_deriv, name="Output"))
+    net.add(DenseLayer(1, 16, tanh, tanh_deriv, name="Hidden1"))
+    net.add(DenseLayer(16, 16, tanh, tanh_deriv, name="Hidden2"))
+    net.add(DenseLayer(16, 1, identity, identity_deriv, name="Output"))
 
     loss_func = MSELoss()
     
@@ -25,7 +25,7 @@ def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     optimizer = PhysicsOptimizer(
         mode=mode_name, 
         noise_scale=0.03,    # Horizontal/Hybrid用
-        shock_interval=2000, # Vertical/Hybrid用
+        shock_interval=6000, # Vertical/Hybrid用
         shock_scale=0.3      # Vertical/Hybrid用
     )
     
