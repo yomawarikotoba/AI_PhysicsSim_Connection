@@ -27,8 +27,8 @@ class PhysicsOptimizer:
 
             # ミクロ層：小さな石はよく動く（1.5倍程度、要調整）
             elif layer.name == "Micro_Hidden":
-                noise_w = np.random.normal(0, self.noise_scale*0.1, layer.weights_gradient.shape)
-                noise_b = np.random.normal(0, self.noise_scale*0.1, layer.biases_gradient.shape)
+                noise_w = np.random.normal(0, self.noise_scale, layer.weights_gradient.shape)
+                noise_b = np.random.normal(0, self.noise_scale, layer.biases_gradient.shape)
                 layer.weights_gradient += noise_w
                 layer.biases_gradient += noise_b
 

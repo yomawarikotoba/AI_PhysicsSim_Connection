@@ -1,4 +1,4 @@
-from ml_core.activations import swish, swish_deriv, identity, identity_deriv
+from ml_core.activations import tanh, tanh_deriv, identity, identity_deriv
 from ml_core.layer import DenseLayer
 class Network:
     def __init__(self):
@@ -33,26 +33,26 @@ class Network:
 
             # ミクロ層：隙間を素早く埋めるために学習率を少し高める（ここは自分で調整）
             elif layer.name in ["Micro_Hidden1", "Micro_Hidden2"]:
-                layer.weights -= (learning_rate*0.2) * layer.weights_gradient
-                layer.biases -= (learning_rate*0.2) * layer.biases_gradient
+                layer.weights -= (learning_rate) * layer.weights_gradient
+                layer.biases -= (learning_rate) * layer.biases_gradient
 
             # 出力層：暴走を抑えるためにマクロと同じか少し小さくする（要調整）
             elif layer.name in ["Macro_Output", "Micro_Output"]:
-                layer.weights -= (learning_rate*0.1) * layer.weights_gradient
-                layer.biases -= (learning_rate*0.1) * layer.biases_gradient
+                layer.weights -= (learning_rate) * layer.weights_gradient
+                layer.biases -= (learning_rate) * layer.biases_gradient
 
 class BimodalNetwork:
     def __init__(self):
         # 既存のNetworkクラスを使って2つのルートを構築する
         self.macro_net = Network()
-        self.macro_net.add(DenseLayer(1, 8, swish, swish_deriv, name="Macro_Hidden1"))
-        self.macro_net.add(DenseLayer(8, 8, swish, swish_deriv, name="Macro_Hidden2"))
-        self.macro_net.add(DenseLayer(8, 1, swish, swish_deriv, name="Macro_Output"))
+        self.macro_net.add(DenseLayer(1, 8, tanh, tanh_deriv, name="Macro_Hidden1"))
+        self.macro_net.add(DenseLayer(8, 8, tanh, tanh_deriv, name="Macro_Hidden2"))
+        self.macro_net.add(DenseLayer(8, 1, tanh, tanh_deriv, name="Macro_Output"))
 
         self.micro_net = Network()
-        self.micro_net.add(DenseLayer(1, 64, swish, swish_deriv, name="Micro_Hidden1"))
-        self.micro_net.add(DenseLayer(64, 64, swish, swish_deriv, name="Micro_Hidden2"))
-        self.micro_net.add(DenseLayer(64, 1, swish, swish_deriv, name="Micro_Output"))
+        self.micro_net.add(DenseLayer(1, 64, tanh, tanh_deriv, name="Micro_Hidden1"))
+        self.micro_net.add(DenseLayer(64, 64, tanh, tanh_deriv, name="Micro_Hidden2"))
+        self.micro_net.add(DenseLayer(64, 1, tanh, tanh_deriv, name="Micro_Output"))
 
     @property
     def layers(self):
