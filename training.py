@@ -25,7 +25,7 @@ def train_experiment(mode_name, x, y, epochs=10000, batch_size=32, lr=0.005):
     optimizer = PhysicsOptimizer(
         mode=mode_name, 
         noise_scale=0.03,    # Horizontal/Hybrid用
-        shock_interval=6000, # Vertical/Hybrid用
+        shock_interval=3000, # Vertical/Hybrid用
         shock_scale=0.3      # Vertical/Hybrid用
     )
     

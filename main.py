@@ -20,7 +20,7 @@ if __name__ == "__main__":
     results = {}
     
     for m in modes:
-        net, losses = train_experiment(m, x_norm, y_norm, epochs=30000, lr=0.5)
+        net, losses = train_experiment(m, x_norm, y_norm, epochs=15000, lr=0.5)
         results[m] = {"net": net, "loss": losses}
 
     # 3. 結果の可視化

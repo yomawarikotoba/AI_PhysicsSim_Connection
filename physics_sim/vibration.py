@@ -10,7 +10,7 @@ class PhysicsOptimizer:
         self.shock_interval = shock_interval
         self.shock_scale = shock_scale
     
-    def apply_horizontal_vibration(self, network, noise_factor=0.07):
+    def apply_horizontal_vibration(self, network, noise_factor=0.05):
         """水平振動: 勾配にノイズを乗せる
            Hybridモードでも有効
         """
